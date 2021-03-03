@@ -41,6 +41,8 @@ public class DtoProduct {
 
     private Double salePrice;
 
+    private String descsDetail;
+
     private String descs;
 
     private Double quantitySold;
@@ -48,7 +50,7 @@ public class DtoProduct {
     private Double quantityCurrent;
 
     private List<String> images;
-//
+
     private List<DtoVariation> dtoVariationList= new ArrayList<>();
 
     public List<DtoVariation> getDtoVariationList() {
@@ -58,9 +60,18 @@ public class DtoProduct {
     public void setDtoVariationList(List<DtoVariation> dtoVariationList) {
         this.dtoVariationList = dtoVariationList;
     }
-//    private Long productCategoriesId;
+
+    public String getDescsDetail() {
+        return descsDetail;
+    }
+
+    public void setDescsDetail(String descsDetail) {
+        this.descsDetail = descsDetail;
+    }
 
     private  String productCategoriesName;
+
+    private  Long productCategoriesId;
 
     private String unitsTitle;
 
@@ -70,6 +81,14 @@ public class DtoProduct {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getProductCategoriesId() {
+        return productCategoriesId;
+    }
+
+    public void setProductCategoriesId(Long productCategoriesId) {
+        this.productCategoriesId = productCategoriesId;
     }
 
     public String getName() {

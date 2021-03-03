@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface RepoCustomer extends JpaRepository<Customer,Long> {
     List<Customer> findAll();
     Optional<Customer> findById(Long id);
+    List<Customer> findByNameAndPhone(String name, String phone);
     List<Customer> findByNameContainingOrPhoneContaining(String name, String phone);
     Page<Customer> findByNameContainingOrPhoneContaining(Pageable pageable,String name, String phone);
     List<Customer>findAllBy(Pageable pageable);

@@ -44,7 +44,8 @@ public class SerOrders {
         List<DtoOrders> dtoOrders = new ArrayList<DtoOrders>();
         for (Orders item : orders) {
             DtoOrders dtoOrder = mapperOrders.toDto(item);
-            dtoOrder.setCustomer_id(item.getCustomer().getId());
+            dtoOrder.setCustomer_name(item.getCustomer().getName());
+            dtoOrder.setCustomer_phone(item.getCustomer().getPhone());
             dtoOrder.setCodeOrder(item.getCodeOrder());
             dtoOrder.setDtoOrderDetails(new ArrayList<DtoOrderDetail>(serOrderDetail.getAllOrderDetailByOrderId(item)));
             dtoOrders.add(dtoOrder);
@@ -93,8 +94,8 @@ public class SerOrders {
                 .collect(Collectors.toList());
         return ordersList;
     }
-    private Product checkProduct(Long id ,String name) {
-        List<Product> products = repoProduct.findByIdAndName(id, name);
+    private Product checkProduct(Long id ) {
+        List<Product> products = repoProduct.findAllById(id);
         if (products.size() > 0) {
             return products.get(0);
         }
@@ -108,6 +109,13 @@ public class SerOrders {
         }
         return false;
     }
+    private Customer checkCustomerNameAndPhone(String name, String phone) {
+        List<Customer> customerList = repoCustomer.findByNameAndPhone(name, phone);
+        if (customerList.size() > 0) {
+            return customerList.get(0);
+        }
+        return null;
+    }
     Map<String, Object> response = new HashMap<>();
     public Object  InsSent(DtoOrders dtoOrders){
         try{
@@ -116,6 +124,15 @@ public class SerOrders {
                 response.put("message", "mã order đã tồn tại!!");
                 response.put("success", false);
                 return response;
+            }
+            String customer_name = dtoOrders.getCustomer_name();
+            String customer_phone = dtoOrders.getCustomer_phone();
+            Customer customer = checkCustomerNameAndPhone(customer_name,customer_phone);
+            if (customer == null) {
+                Customer newCustomer = new Customer();
+                newCustomer.setName(customer_name);
+                newCustomer.setPhone(customer_phone);
+                customer = repoCustomer.save(newCustomer);
             }
             Orders orders = new Orders();
             orders.setAddress(dtoOrders.getAddress());
@@ -134,13 +151,13 @@ public class SerOrders {
             orders.setProvince_id(dtoOrders.getProvince_id());
             orders.setTotal_money(dtoOrders.getTotal_money());
             orders.setWard_id(dtoOrders.getWard_id());
-            Optional<Customer> customer = repoCustomer.findById(dtoOrders.getCustomer_id());
+//            Optional<Customer> customer = repoCustomer.findById(dtoOrders.getCustomer_id());
 
-            if(!customer.isPresent()){
-                response.put("success", false);
-                return response;
-            }
-            orders.setCustomer(customer.get());
+//            if(!customer.isPresent()){
+//                response.put("success", false);
+//                return response;
+//            }
+            orders.setCustomer(customer);
             orders = repoOrders.save(orders);
             Orders newOrder = new Orders();
             newOrder = repoOrders.save(orders);
@@ -150,22 +167,22 @@ public class SerOrders {
             for(DtoOrderDetail item : dtoOrderDetails){
                 String title = item.getProductTitle();
                 Long id=item.getProductId();
-                Product product1 = checkProduct(id,title);
+                Product product1 = checkProduct(id);
                 if(product1 == null){
                     response.put("message", "Sản phẩm ko tìm thấy ");
                     response.put("success", false);
                     return response;
                 }
                 OrderDetail newOrderDetail = new OrderDetail();
-                newOrderDetail.setWeight(item.getWeight());
+                newOrderDetail.setProperty(item.getProperty());
+                newOrderDetail.setVariation(item.getVariation());
                 newOrderDetail.setQuantity(item.getQuantity());
                 newOrderDetail.setTotalMoney(product1.getSalePrice()*item.getQuantity());
                 newOrderDetail.setProduct(product1);
                 newOrderDetail.setOrders(newOrder);
                 newOrderDetail = repoDetailOrder.save(newOrderDetail);
                 item.setId(newOrderDetail.getId());
-//                item.setOrderId(newOrderDetail.getOrders().getId());
-//                item.setOrderCode(newOrderDetail.getOrders().getCodeOrder());
+                item.setTotalMoney(newOrderDetail.getTotalMoney());
                 item.setProductTitle(newOrderDetail.getProduct().getName());
                 Double total=product1.getQuantityCurrent()-item.getQuantity();
                 Product product2 = new Product();
@@ -189,6 +206,7 @@ public class SerOrders {
                 product2.setUnits(product1.getUnits());
                 product2.setProductCatogories(product1.getProductCatogories());
                 product2 = repoProduct.save(product2);
+
             }
             response.put("data", dtoOrders);
             response.put("success", true);

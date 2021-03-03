@@ -45,6 +45,31 @@ public class SerProduct {
     @Autowired
     MapperProductCatogories mapperProductCatogories;
 
+    public List<DtoProduct> getAllProductByProductCatogoriesId(ProductCatogories productCatogories) {
+        List<Product> product = repoProduct.findAllByProductCatogories(productCatogories);
+        List<DtoProduct> dtoProductList = new ArrayList<DtoProduct>();
+        for (Product item : product) {
+            DtoProduct dtoProduct = mapperProduct.toDto(item);
+            dtoProduct.setUnitsTitle(item.getUnits().getName());
+            dtoProduct.setProductCategoriesName(item.getProductCatogories().getTitle());
+            dtoProduct.setProductCategoriesId(item.getProductCatogories().getId());
+//            dtoProduct.setDtoVariationList(new ArrayList<DtoVariation>(getAllVariationByProductId(item)));
+            dtoProductList.add(dtoProduct);
+        }
+        return dtoProductList;
+    }
+//    public List<DtoProduct> getAllProductByProductCatogoriesIds(Long id) {
+//        List<Product> product = repoProduct.findAllByProductCatogoriesid(id);
+//        List<DtoProduct> dtoProductList = new ArrayList<DtoProduct>();
+//        for (Product item : product) {
+//            DtoProduct dtoProduct = mapperProduct.toDto(item);
+//            dtoProduct.setUnitsTitle(item.getUnits().getName());
+//            dtoProduct.setProductCategoriesName(item.getProductCatogories().getTitle());
+////            dtoProduct.setDtoVariationList(new ArrayList<DtoVariation>(getAllVariationByProductId(item)));
+//            dtoProductList.add(dtoProduct);
+//        }
+//        return dtoProductList;
+//    }
     public List<DtoVariation> getAllVariationByProductId(Product product) {
         List<Variation> variations = repoVariation.findAllByProduct(product);
         List<DtoVariation> dtoVariationList = new ArrayList<DtoVariation>();
@@ -57,6 +82,32 @@ public class SerProduct {
     }
     public List<DtoProduct> getDtoProductPage(Pageable pageable){
         List<Product> products = repoProduct.findAllBy(pageable);
+        List<DtoProduct> dtoProducts = new ArrayList<DtoProduct>();
+        for (Product item : products) {
+            DtoProduct dtoProduct = mapperProduct.toDto(item);
+            dtoProduct.setUnitsTitle(item.getUnits().getName());
+            dtoProduct.setProductCategoriesName(item.getProductCatogories().getTitle());
+            dtoProduct.setProductCategoriesId(item.getProductCatogories().getId());
+            dtoProduct.setDtoVariationList(new ArrayList<DtoVariation>(getAllVariationByProductId(item)));
+            dtoProducts.add(dtoProduct);
+        }
+        return dtoProducts;
+    }
+    public List<DtoProduct> getDtoProduct(){
+        List<Product> products = repoProduct.findProductByQuantitySoldLimitedTo();
+        List<DtoProduct> dtoProducts = new ArrayList<DtoProduct>();
+        for (Product item : products) {
+            DtoProduct dtoProduct = mapperProduct.toDto(item);
+            dtoProduct.setUnitsTitle(item.getUnits().getName());
+            dtoProduct.setProductCategoriesId(item.getProductCatogories().getId());
+            dtoProduct.setProductCategoriesName(item.getProductCatogories().getTitle());
+            dtoProduct.setDtoVariationList(new ArrayList<DtoVariation>(getAllVariationByProductId(item)));
+            dtoProducts.add(dtoProduct);
+        }
+        return dtoProducts;
+    }
+    public List<DtoProduct> getDtoProductById(Long id){
+        List<Product> products = repoProduct.findAllById(id);
         List<DtoProduct> dtoProducts = new ArrayList<DtoProduct>();
         for (Product item : products) {
             DtoProduct dtoProduct = mapperProduct.toDto(item);
@@ -176,6 +227,7 @@ public class SerProduct {
             product.setCreatedDate(new Date());
             product.setBarCode(dtoProduct.getBarCode());
             product.setDescs(dtoProduct.getDescs());
+            product.setDescsDetail(dtoProduct.getDescsDetail());
             product.setName(dtoProduct.getName());
             product.setModifiedDate(new Date());
             product.setCreatedBy(dtoProduct.getCreatedBy());
@@ -244,6 +296,7 @@ public class SerProduct {
             product.setCreatedDate(new Date());
             product.setBarCode(dtoProduct.getBarCode());
             product.setDescs(dtoProduct.getDescs());
+            product.setDescsDetail(dtoProduct.getDescsDetail());
             product.setName(dtoProduct.getName());
             product.setModifiedDate(new Date());
             product.setCreatedBy(dtoProduct.getCreatedBy());

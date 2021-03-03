@@ -1,6 +1,8 @@
 package com.saleor.saleor_api.service;
 
+import com.saleor.saleor_api.dto.DtoProduct;
 import com.saleor.saleor_api.dto.DtoProductCatogories;
+import com.saleor.saleor_api.dto.DtoVariation;
 import com.saleor.saleor_api.mapper.MapperProductCatogories;
 import com.saleor.saleor_api.repo.RepoProductCatogories;
 import com.saleor.saleor_api.repo.RepoWareHouse;
@@ -42,6 +44,16 @@ public class SerProductCatogories {
 //        }
 //        return dtoProductCatogories;
 //    }
+//public List<DtoVariation> getAllVariationByProductId(Product product) {
+//    List<Variation> variations = repoVariation.findAllByProduct(product);
+//    List<DtoVariation> dtoVariationList = new ArrayList<DtoVariation>();
+//    for (Variation item : variations) {
+//        DtoVariation dtoVariation = mapperVariation.toDto(item);
+//
+//        dtoVariationList.add(dtoVariation);
+//    }
+//    return dtoVariationList;
+//}
     public List<DtoProductCatogories> getdtoProductCatogoriesPage(Pageable pageable){
         List<ProductCatogories> productCatogories= repoProductCatogories.findAllBy(pageable);
         List<DtoProductCatogories> dtoProductCatogories= new ArrayList<>();
@@ -49,7 +61,7 @@ public class SerProductCatogories {
             DtoProductCatogories dtoProductCatogories1= mapperProductCatogories.toDto(item);
 
             dtoProductCatogories1.setWareHouseTitle(item.getWareHouse().getTitle());
-//            dtoProductCatogories1.setDtoProducts(new ArrayList<DtoProduct>(serProduct.getAllProductByProductCatogoriesId(item)));
+            dtoProductCatogories1.setDtoProducts(new ArrayList<DtoProduct>(serProduct.getAllProductByProductCatogoriesId(item)));
             dtoProductCatogories.add(dtoProductCatogories1);
         }
         return dtoProductCatogories;

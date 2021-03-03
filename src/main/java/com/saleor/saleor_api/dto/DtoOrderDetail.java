@@ -22,11 +22,11 @@ public class DtoOrderDetail {
 
     private Double quantity;
 
-    private Float weight;
 
-//    private Long orderId;
 
-//    private String orderCode;
+    private String property;
+
+    private String variation;
 
     private Long productId;
 
@@ -56,29 +56,7 @@ public class DtoOrderDetail {
         this.quantity = quantity;
     }
 
-    public Float getWeight() {
-        return weight;
-    }
 
-    public void setWeight(Float weight) {
-        this.weight = weight;
-    }
-
-//    public Long getOrderId() {
-//        return orderId;
-//    }
-//
-//    public void setOrderId(Long orderId) {
-//        this.orderId = orderId;
-//    }
-//
-//    public String getOrderCode() {
-//        return orderCode;
-//    }
-//
-//    public void setOrderCode(String orderCode) {
-//        this.orderCode = orderCode;
-//    }
 
     public Long getProductId() {
         return productId;
@@ -94,5 +72,21 @@ public class DtoOrderDetail {
 
     public void setProductTitle(String productTitle) {
         this.productTitle = productTitle;
+    }
+
+    public String getProperty() {
+        return property;
+    }
+
+    public void setProperty(String property) {
+        this.property = property;
+    }
+
+    public String getVariation() {
+        return variation;
+    }
+
+    public void setVariation(String variation) {
+        this.variation = variation;
     }
 }

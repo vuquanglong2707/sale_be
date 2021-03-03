@@ -28,8 +28,12 @@ public class OrderDetail {
     @Column(name="quantity")
     private Double quantity;
 
-    @Column(name = "weight")
-    private Float weight;
+    @Column(name="properties")
+    private String property;
+
+    @Column(name="variation")
+    private String variation;
+
 
     @JsonIgnore
     @ManyToOne

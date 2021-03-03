@@ -57,8 +57,11 @@ public class Product {
     @Column(name = "qrcode")
     private String qrCode;
 
-    @Column(name = "content")
+    @Column(name = "content",columnDefinition = "text")
     private String content;
+
+    @Column(name = "content_detail",columnDefinition = "text")
+    private String descsDetail;
 
     @Column(name = "price")
     private Double price;

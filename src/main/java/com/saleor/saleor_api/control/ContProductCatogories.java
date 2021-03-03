@@ -29,23 +29,45 @@ public class ContProductCatogories {
     @Autowired
     SerProductCatogories serProductCatogories;
 
-//    @RequestMapping(value = "", method = RequestMethod.GET)
-//    @CrossOrigin(origins = "*", maxAge = 3600)
-//    public ResponseEntity<Map<String, Object>> getAllProductCatogories(Pageable pageable) {
-//        Map<String, Object> response = new HashMap<>();
-//        try {
-//            List<DtoProductCatogories> data = serProductCatogories.getdtoProductCatogoriesPage(pageable);
-//            response.put("data", data);
-//            response.put("success", true);
-//            response.put("message", "Ok");
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        } catch (Exception e) {
-//            response.put("success", false);
-//            response.put("error", e.getMessage());
-//            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
+    @RequestMapping(value = "/getAllProductByCato", method = RequestMethod.GET)
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    public ResponseEntity<Map<String, Object>> getAllProductCatogories(Pageable pageable) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            List<DtoProductCatogories> data = serProductCatogories.getdtoProductCatogoriesPage(pageable);
+            response.put("data", data);
+            response.put("success", true);
+            response.put("message", "Ok");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    @CrossOrigin(origins = "*", maxAge = 3600)
+        public ResponseEntity<Map<String, Object>> getAll()
+        {
+            Resp resp = new Resp();
+            Map<String, Object> response =  new HashMap<>();
+            try {
+                List<ProductCatogories> data = serProductCatogories.GetAll();
+                resp.setSuccess(true);
+                resp.setMsg("Ok");
+                resp.setData(data);
+                response.put("data",resp.getData());
+                response.put("success",resp.getSuccess());
+                response.put("message", resp.getMsg());
+                return new ResponseEntity<>(response,HttpStatus.OK);
+            }
+            catch (Exception e){
+                resp.setSuccess(false);
+                response.put("success",resp.getSuccess());
+                response.put("error", e);
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
     @RequestMapping(value = "/byid", method = RequestMethod.GET)
     @CrossOrigin(origins = "*", maxAge = 3600)
     public ResponseEntity<?> getByID(@RequestParam(value = "id", required =false) Long id)
@@ -66,6 +88,7 @@ public class ContProductCatogories {
     {
         return new ResponseEntity<>(serProductCatogories.delete(id),HttpStatus.OK);
     }
+
     @RequestMapping(value = "", method = RequestMethod.GET)
     @CrossOrigin(origins = "*", maxAge = 3600)
     public ResponseEntity<Map<String, Object>> getPage(Pageable pageable, String query)
