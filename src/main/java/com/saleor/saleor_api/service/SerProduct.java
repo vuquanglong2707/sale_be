@@ -198,12 +198,7 @@ public class SerProduct {
     public Object UpdatePro(DtoProduct dtoProduct) {
         Map<String, Object> response = new HashMap<String,Object>();
         try {
-            // check sku
-            if (isSkuExist(dtoProduct.getSku())) {
-                response.put("message", "mã sku đã tồn tại!!");
-                response.put("success", false);
-                return response;
-            }
+
             // tìm tên đơn vị tính nêu có thì trả ra
             String unit = dtoProduct.getUnitsTitle();
             Units units = checkProductUnit(unit);
